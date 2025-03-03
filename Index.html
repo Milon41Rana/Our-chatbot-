@@ -1,0 +1,72 @@
+k<!DOCTYPE html>
+<html>
+<head>
+    <title>আমাদের চ্যাটবট (Our Chatbot)</title>
+    <style>
+        body { font-family: sans-serif; }
+        #chat-container { width: 500px; margin: 0 auto; border: 1px solid #ccc; padding: 10px; }
+        #chat-log { height: 300px; overflow-y: scroll; border-bottom: 1px solid #ccc; }
+        #user-input { width: 100%; padding: 5px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-log"></div>
+        <input type="text" id="user-input" placeholder="Type your message...">
+    </div>
+    <script>
+        const chatLog = document.getElementById('chat-log');
+        const userInput = document.getElementById('user-input');
+        const apiKey = '<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
+          >'; // এখানে আপনার API কী দিন
+        const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
+        const siteUrl = 'https://<Milon41Rana>.github.io/<Our-chatbot->'; // আপনার সাইটের URL দিন
+        const siteName = 'আমাদের চ্যাটবট (Our Chatbot)'; // আপনার সাইটের নাম দিন
+
+        userInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = userInput.value;
+            if (!message) return;
+
+            appendMessage('user', message);
+            userInput.value = '';
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${ 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 }`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': siteUrl, // সাইটের URL ব্যবহার করা হয়েছে
+                    'X-Title': siteName // সাইটের নাম ব্যবহার করা হয়েছে
+                },
+                body: JSON.stringify({
+                    model: 'openai/gpt-4o', // অথবা অন্য কোন মডেল
+                    messages: [{ role: 'user', content: message }]
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botMessage = data.choices[0].message.content;
+                appendMessage('bot', botMessage);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                appendMessage('bot', 'An error occurred.');
+            });
+        }
+
+        function appendMessage(sender, message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = `${sender}: ${message}`;
+            chatLog.appendChild(messageDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+    </script>
+    <p>আমাদের চ্যাটবট ভিজিট করুন: <a href="https://<Milon41Rana>.github.io/<Our-chatbot>">আমাদের চ্যাটবট</a></p>
+</body>
+</html>
